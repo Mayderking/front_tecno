@@ -75,7 +75,7 @@ const Categoria = () => {
 
       <button
         onClick={() => setShowForm(!showForm)}
-        className="bg-teal-600 text-white px-4 py-2 rounded shadow hover:bg-teal-700 mb-6"
+        className="bg-[#b6d7fd] text-black px-4 py-2 rounded shadow hover:bg-[#81a1c6] mb-6"
       >
         {showForm ? "Cerrar Formulario" : "Nueva Categoría"}
       </button>
@@ -83,9 +83,9 @@ const Categoria = () => {
       {showForm && (
         <form
           onSubmit={handleCreate}
-          className="bg-white p-4 rounded shadow-md w-1/2 mx-auto mb-6"
+          className="bg-[#233953] p-4 rounded shadow-md w-auto mx-auto mb-6"
         >
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">
+          <h2 className="text-xl font-semibold text-primary mb-4">
             Registrar Nueva Categoría
           </h2>
           <input
@@ -95,7 +95,7 @@ const Categoria = () => {
             onChange={(e) =>
               setFormData({ ...formData, nombre: e.target.value })
             }
-            className="w-full mb-4 p-2 border rounded"
+            className="w-full mb-4 p-2 border rounded bg-[#1F252B] border-gray-800 focus:border-[#dec6ac] font-light outline-none text-white"
           />
           <textarea
             placeholder="Descripción de la Categoría"
@@ -103,11 +103,11 @@ const Categoria = () => {
             onChange={(e) =>
               setFormData({ ...formData, descripcion: e.target.value })
             }
-            className="w-full mb-4 p-2 border rounded"
+            className="w-full mb-4 p-2 border rounded bg-[#1F252B] border-gray-800 focus:border-[#dec6ac] font-light outline-none text-white"
           />
           <button
             type="submit"
-            className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600"
+            className="bg-[#b6d7fd] text-black px-4 py-2 rounded hover:bg-[#81a1c6]"
           >
             Registrar Categoría
           </button>
@@ -118,16 +118,16 @@ const Categoria = () => {
         {categorias.map((categoria) => (
           <div
             key={categoria.id}
-            className="bg-white rounded shadow-md p-4 border border-gray-200"
+            className="bg-[#233953] rounded shadow-md p-4 border border-[#dec6ac]"
           >
-            <h2 className="text-lg font-semibold text-gray-800 mb-2">
+            <h2 className="text-lg font-semibold text-primary mb-2">
               {categoria.nombre}
             </h2>
-            <p className="text-gray-600">{categoria.descripcion}</p>
+            <p className="text-white">{categoria.descripcion}</p>
             <div className="flex justify-between mt-4">
               <button
                 onClick={() => handleDelete(categoria.id)}
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                className="bg-[#b6d7fd] text-black px-4 py-2 rounded hover:bg-[#81a1c6]"
               >
                 Eliminar
               </button>

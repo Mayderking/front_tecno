@@ -9,12 +9,11 @@ const Venta = () => {
     producto: "",
     cantidad: "",
     total: "",
-    fecha: "",
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [precioProducto, setPrecioProducto] = useState(0);
-  
+
   // Estado para manejar la visibilidad del formulario
   const [showForm, setShowForm] = useState(false);
 
@@ -68,19 +67,15 @@ const Venta = () => {
       setError("La cantidad debe ser mayor a 0.");
       return;
     }
-    if (!formData.fecha) {
-      setError("Debes seleccionar una fecha.");
-      return;
-    }
 
     try {
       const response = await api.post("/Venta/", formData);
       setVentas([...ventas, response.data]);
-      setFormData({ producto: "", cantidad: "", total: "", fecha: "" });
+      setFormData({ producto: "", cantidad: "", total: "" });
       setError("");
       setShowForm(false); // Ocultar el formulario después de crear la venta
     } catch (err) {
-      setError("Error al registrar la venta.");
+      setError("Error al registrar la venta se paso el limite del stock");
     }
   };
 
@@ -100,7 +95,9 @@ const Venta = () => {
 
   return (
     <div className="container mx-auto p-6 bg-gradient-to-br from-blue-100 to-teal-200 min-h-screen">
-      <h1 className="text-3xl font-bold text-center text-teal-800 mb-6">Gestión de Ventas</h1>
+      <h1 className="text-3xl font-bold text-center text-teal-800 mb-6">
+        Gestión de Ventas
+      </h1>
 
       {/* Botón para mostrar/ocultar el formulario */}
       <button
@@ -112,8 +109,13 @@ const Venta = () => {
 
       {/* Formulario para registrar venta */}
       {showForm && (
-        <form onSubmit={handleCreate} className="bg-white p-4 rounded shadow-md w-1/2 mx-auto mb-6">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">Registrar Nueva Venta</h2>
+        <form
+          onSubmit={handleCreate}
+          className="bg-white p-4 rounded shadow-md w-1/2 mx-auto mb-6"
+        >
+          <h2 className="text-xl font-semibold text-gray-700 mb-4">
+            Registrar Nueva Venta
+          </h2>
           <select
             value={formData.producto}
             onChange={handleProductoChange}
@@ -161,26 +163,36 @@ const Venta = () => {
           </tr>
         </thead>
         <tbody>
-          {ventas.map((venta) => (
-            <tr key={venta.id}>
-              <td className="border border-gray-300 px-4 py-2">{venta.id}</td>
-              <td className="border border-gray-300 px-4 py-2">
-                {venta.producto?.nombre || "Producto no disponible"}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">{venta.cantidad}</td>
-              <td className="border border-gray-300 px-4 py-2">{venta.total}</td>
-              <td className="border border-gray-300 px-4 py-2">
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                <button
-                  onClick={() => handleDelete(venta.id)}
-                  className="bg-red-500 text-white py-1 px-2 rounded"
-                >
-                  Eliminar
-                </button>
-              </td>
-            </tr>
-          ))}
+          {ventas.map((venta) => {
+            // Buscar el producto asociado en la lista de productos
+            const productoAsociado = productos.find(
+              (producto) => producto.id === venta.producto
+            );
+            return (
+              <tr key={venta.id}>
+                <td className="border border-gray-300 px-4 py-2">{venta.id}</td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {productoAsociado
+                    ? productoAsociado.nombre
+                    : "Producto no disponible"}
+                </td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {venta.cantidad}
+                </td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {venta.total}
+                </td>
+                <td className="border border-gray-300 px-4 py-2">
+                  <button
+                    onClick={() => handleDelete(venta.id)}
+                    className="bg-red-500 text-white py-1 px-2 rounded"
+                  >
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
@@ -188,4 +200,3 @@ const Venta = () => {
 };
 
 export default Venta;
-

@@ -57,9 +57,9 @@ const Layout = () => {
   return (
     <div>
       {/* Navbar */}
-      <div className="fixed top-0 left-0 w-full bg-opacity-70 backdrop-blur-md z-50">
+      <div className="fixed top-0 left-0 w-full bg-[#8b95a0] backdrop-blur-md z-50">
         <div
-          className="max-w-[1300px] mx-auto flex justify-between text-secondary
+          className="max-w-[1300px] mx-auto flex justify-between text-white
         text-xl items-center px-12 h-20"
         >
           <p>TecnoProducts</p>
@@ -81,12 +81,12 @@ const Layout = () => {
               </Link>
             </li>
             <li>
-              <button
-                onClick={handleLogout}
-                className="bg-red-500 text-white px-4 py-2 rounded"
-              >
-                Cerrar sesión
-              </button>
+              <Link
+               onClick={handleLogout}
+               className="text-white-600 hover:text-red-900 "
+               >
+                Cerrar sesion
+              </Link>
             </li>
           </ul>
 
@@ -135,13 +135,13 @@ const Layout = () => {
                 </Link>
               </li>
               <li>
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-500 text-white px-4 py-2 rounded"
-                >
-                  Cerrar sesión
-                </button>
-              </li>
+              <Link
+               onClick={handleLogout}
+               className=" text-white-600 hover:text-red-900"
+               >
+                Cerrar sesion
+              </Link>
+            </li>
             </ul>
           </motion.div>
         </div>

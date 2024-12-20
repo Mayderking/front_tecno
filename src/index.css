@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 body {
-    background-color: #0A1828;
+    background-color: #1F252B;
 }
 
 .text-primary {
     color: #BFA181;
 }
 
-.text-secondary {
+.secondary {
     color: #22d8d2;
 }

@@ -116,7 +116,7 @@ const Producto = () => {
 
       {/* Formulario de creación de producto */}
       {showForm && (
-        <form onSubmit={handleCreate} className="bg-white p-4 rounded shadow-md w-1/2 mx-auto mb-6">
+        <form onSubmit={handleCreate} className="bg-white p-4 rounded shadow-md w-auto mx-auto mb-6">
           <h2 className="text-xl font-semibold text-gray-700 mb-4">Registrar Nuevo Producto</h2>
           <input
             type="text"
