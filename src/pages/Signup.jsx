@@ -14,13 +14,13 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Limpiar errores previos
-    setSuccess(false); // Limpiar éxito previo
+    setError("");
+    setSuccess(false);
 
     try {
       await api.post("/signup/", formData);
-      setSuccess(true); // Indicar que el registro fue exitoso
-      setTimeout(() => navigate("/login"), 2000); // Redirigir al login
+      setSuccess(true);
+      setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
       const errorMessage =
         err.response?.data?.error || "Error al registrar el usuario.";

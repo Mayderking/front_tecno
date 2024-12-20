@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import api, { setAuthToken } from "../api/api"; // Asegúrate de que api.js esté configurado correctamente
+import api, { setAuthToken } from "../api/api";
 
 const Producto = () => {
   const [productos, setProductos] = useState([]);
   const [categorias, setCategorias] = useState([]);
-  const [proveedores, setProveedores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({

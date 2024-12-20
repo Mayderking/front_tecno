@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // Importar useNavigate
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import api, { setAuthToken } from "../api/api";
 
@@ -13,7 +13,7 @@ const Categoria = () => {
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
-      setAuthToken(token); // Configura el token en Axios
+      setAuthToken(token);
     } else {
       setError(
         <>

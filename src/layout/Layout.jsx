@@ -3,13 +3,13 @@ import logo from "../assets/logo.png";
 import { useNavigate, Link } from "react-router-dom";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { motion } from "framer-motion";
-import { useAuth } from "../context/AuthContext"; // Tu contexto de autenticación
-import { Outlet } from "react-router-dom"; // Importa Outlet desde react-router-dom
+import { useAuth } from "../context/AuthContext";
+import { Outlet } from "react-router-dom";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
 
 const Layout = () => {
   const [nav, setNav] = useState(false);
-  const { isAuthenticated, logout } = useAuth(); // Asegúrate de tener un método logout en tu contexto
+  const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
 
   const toggleNav = () => {
@@ -21,20 +21,16 @@ const Layout = () => {
   };
 
   const handleLogout = () => {
-    // Verificar si el usuario está autenticado
     if (!isAuthenticated) {
       alert("No puedes cerrar sesión sin haber iniciado sesión.");
-      return; // Evita que se cierre la sesión si no está logueado
+      return;
     }
 
-    // Eliminar tokens del localStorage
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
 
-    // Llamar a logout del contexto
     logout();
 
-    // Redirigir al login
     navigate("/login");
   };
 
@@ -57,7 +53,6 @@ const Layout = () => {
 
   return (
     <div>
-      {/* Navbar */}
       <div className="fixed top-0 left-0 w-full bg-[#8b95a0] backdrop-blur-md z-50">
         <div
           className="max-w-[1300px] mx-auto flex justify-between text-white
@@ -145,7 +140,6 @@ const Layout = () => {
         </div>
       </div>
 
-      {/* Outlet for Page Content */}
       <main className="pt-20">
         <Outlet />
       </main>

@@ -1,22 +1,22 @@
 import React from "react";
 import image from "../assets/image2.png";
-import { useNavigate } from "react-router-dom"; // Para navegar a otras páginas
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FaBox, FaTags, FaShoppingCart } from "react-icons/fa"; // Importar iconos
+import { FaBox, FaTags, FaShoppingCart } from "react-icons/fa";
 
 const Welcome = () => {
-  const navigate = useNavigate(); // Hook para redirigir
+  const navigate = useNavigate();
 
   const goToCategorias = () => {
-    navigate("/categoria"); // Redirige a la página de Categorías
+    navigate("/categoria");
   };
 
   const goToProductos = () => {
-    navigate("/Producto"); // Redirige a la página de Productos
+    navigate("/Producto");
   };
 
   const goToCarrito = () => {
-    navigate("/Venta"); // Redirige a la página del Carrito
+    navigate("/Venta");
   };
 
   return (
@@ -26,7 +26,6 @@ const Welcome = () => {
       transition={{ duration: 2.5 }}
     >
       <div className="flex flex-col items-center justify-between h-screen bg-gray-900 text-white">
-        {/* Imagen Principal */}
         <div className="relative w-full h-[20%] sm:h-[60%] flex justify-center items-center">
           <img
             src={image}
@@ -35,7 +34,6 @@ const Welcome = () => {
           />
         </div>
 
-        {/* Sección de Iconos */}
         <div className="flex flex-wrap justify-center gap-12 sm:gap-24 px-4 py-28">
           <button
             onClick={goToProductos}

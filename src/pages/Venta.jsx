@@ -15,10 +15,8 @@ const Venta = () => {
   const [error, setError] = useState("");
   const [precioProducto, setPrecioProducto] = useState(0);
 
-  // Estado para manejar la visibilidad del formulario
   const [showForm, setShowForm] = useState(false);
 
-  // Cargar datos iniciales
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,7 +33,6 @@ const Venta = () => {
     fetchData();
   }, []);
 
-  // Manejar cambios en el producto seleccionado
   const handleProductoChange = (e) => {
     const selectedProductoId = e.target.value;
     const productoSeleccionado = productos.find(
@@ -45,21 +42,18 @@ const Venta = () => {
     setFormData({ ...formData, producto: selectedProductoId });
   };
 
-  // Manejar cambios en la cantidad
   const handleCantidadChange = (e) => {
     const cantidad = e.target.value;
     const totalCalculado = cantidad * precioProducto || 0;
     setFormData({
       ...formData,
       cantidad,
-      total: totalCalculado.toFixed(2), // Asegura formato decimal
+      total: totalCalculado.toFixed(2),
     });
   };
 
-  // Crear nueva venta
   const handleCreate = async (e) => {
     e.preventDefault();
-    // Validación de campos antes de enviar
     if (!formData.producto) {
       setError("Debes seleccionar un producto.");
       return;
@@ -74,13 +68,12 @@ const Venta = () => {
       setVentas([...ventas, response.data]);
       setFormData({ producto: "", cantidad: "", total: "" });
       setError("");
-      setShowForm(false); // Ocultar el formulario después de crear la venta
+      setShowForm(false);
     } catch (err) {
       setError("Error al registrar la venta se paso el limite del stock");
     }
   };
 
-  // Eliminar venta
   const handleDelete = async (id) => {
     if (!window.confirm("¿Estás seguro de eliminar esta venta?")) return;
     try {
@@ -105,7 +98,6 @@ const Venta = () => {
           Gestión de Ventas
         </h1>
 
-        {/* Botón para mostrar/ocultar el formulario */}
         <button
           onClick={() => setShowForm(!showForm)}
           className="bg-[#b6d7fd] text-black px-4 py-2 rounded shadow hover:bg-[#81a1c6] mb-6"
@@ -113,7 +105,6 @@ const Venta = () => {
           {showForm ? "Cerrar Formulario" : "Nueva Venta"}
         </button>
 
-        {/* Formulario para registrar venta */}
         {showForm && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -163,10 +154,8 @@ const Venta = () => {
           </motion.div>
         )}
 
-        {/* Tabla de ventas */}
         <div className="py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {ventas.map((venta) => {
-            // Buscar el producto asociado en la lista de productos
             const productoAsociado = productos.find(
               (producto) => producto.id === venta.producto
             );
