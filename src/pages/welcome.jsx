@@ -1,5 +1,8 @@
 import React from "react";
+import image from "../assets/image2.png";
 import { useNavigate } from "react-router-dom"; // Para navegar a otras páginas
+import { motion } from "framer-motion";
+import { FaBox, FaTags, FaShoppingCart } from "react-icons/fa"; // Importar iconos
 
 const Welcome = () => {
   const navigate = useNavigate(); // Hook para redirigir
@@ -17,34 +20,47 @@ const Welcome = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-900">
-      <div className="bg-white p-8 rounded shadow-md w-96 text-center">
-        <h1 className="text-3xl font-bold mb-4">Bienvenido a la Tienda</h1>
-        <p className="text-lg mb-6">
-          Estamos encantados de tenerte. Explora nuestras categorías y productos.
-        </p>
-        <div className="space-y-4">
-          <button
-            onClick={goToCategorias}
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-          >
-            Ir a Categorías
-          </button>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 2.5 }}
+    >
+      <div className="flex flex-col items-center justify-between h-screen bg-gray-900 text-white">
+        {/* Imagen Principal */}
+        <div className="relative w-full h-[20%] sm:h-[60%] flex justify-center items-center">
+          <img
+            src={image}
+            alt="Future Technologies"
+            className="w-auto max-h-full sm:max-w-[80%] md:max-w-[60%] lg:max-w-full object-contain"
+          />
+        </div>
+
+        {/* Sección de Iconos */}
+        <div className="flex flex-wrap justify-center gap-12 sm:gap-24 px-4 py-28">
           <button
             onClick={goToProductos}
-            className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+            className="flex flex-col items-center text-primary hover:text-[#917961]"
           >
-            Ver Productos
+            <FaBox size={32} className="sm:size-20" />
+            <span className="mt-2 text-sm sm:text-base">PRODUCTOS</span>
+          </button>
+          <button
+            onClick={goToCategorias}
+            className="flex flex-col items-center text-primary hover:text-[#917961]"
+          >
+            <FaTags size={32} className="sm:size-20" />
+            <span className="mt-2 text-sm sm:text-base">CATEGORÍAS</span>
           </button>
           <button
             onClick={goToCarrito}
-            className="w-full bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600"
+            className="flex flex-col items-center text-primary hover:text-[#917961]"
           >
-            Ver Carrito
+            <FaShoppingCart size={32} className="sm:size-20" />
+            <span className="mt-2 text-sm sm:text-base">VENTAS</span>
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

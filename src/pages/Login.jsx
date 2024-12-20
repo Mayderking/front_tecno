@@ -65,7 +65,7 @@ const Login = () => {
         <h1 className="text-2xl font-bold mb-4 text-primary text-center">Iniciar Sesión</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <div className="mb-4">
-          <label htmlFor="username" className="block text-sm font-medium text-secondary">
+          <label htmlFor="username" className="block text-sm font-medium text-white">
             Usuario
           </label>
           <input
@@ -80,7 +80,7 @@ const Login = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="password" className="block text-sm font-medium text-secondary">
+          <label htmlFor="password" className="block text-sm font-medium text-white">
             Contraseña
           </label>
           <input

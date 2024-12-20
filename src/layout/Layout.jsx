@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
+import { useNavigate, Link } from "react-router-dom";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
-import { Link } from "react-scroll";
 import { motion } from "framer-motion";
 import { useAuth } from "../context/AuthContext"; // Tu contexto de autenticación
-import { Outlet } from "react-router-dom";  // Importa Outlet desde react-router-dom
+import { Outlet } from "react-router-dom"; // Importa Outlet desde react-router-dom
+import { FaArrowRightFromBracket } from "react-icons/fa6";
 
 const Layout = () => {
   const [nav, setNav] = useState(false);
@@ -25,17 +26,17 @@ const Layout = () => {
       alert("No puedes cerrar sesión sin haber iniciado sesión.");
       return; // Evita que se cierre la sesión si no está logueado
     }
-  
+
     // Eliminar tokens del localStorage
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-  
+
     // Llamar a logout del contexto
     logout();
-  
+
     // Redirigir al login
     navigate("/login");
-  };  
+  };
 
   const menuVariants = {
     open: {
@@ -60,32 +61,29 @@ const Layout = () => {
       <div className="fixed top-0 left-0 w-full bg-[#8b95a0] backdrop-blur-md z-50">
         <div
           className="max-w-[1300px] mx-auto flex justify-between text-white
-        text-xl items-center px-12 h-20"
+        text-xl items-center px-12 h-20 abril-fatface-regular"
         >
-          <p>TecnoProducts</p>
+          <Link to="/Welcome" className="flex items-center gap-4">
+            <img src={logo} alt="Logo" className="w-12 h-12" />
+            <span>TECNOPRODUCTS</span>
+          </Link>
 
           <ul className="hidden md:flex gap-12 z-10 cursor-pointer">
             <li>
-              <Link to="Categoria" smooth={true} offset={50} duration={500}>
-                Categorías
-              </Link>
+              <Link to="/Categoria">Categorías</Link>
             </li>
             <li>
-              <Link to="productos" smooth={true} offset={50} duration={500}>
-                Productos
-              </Link>
+              <Link to="Producto">Productos</Link>
             </li>
             <li>
-              <Link to="carrito" smooth={true} offset={50} duration={500}>
-                Carrito
-              </Link>
+              <Link to="Venta">Ventas</Link>
             </li>
             <li>
               <Link
-               onClick={handleLogout}
-               className="text-white-600 hover:text-red-900 "
-               >
-                Cerrar sesion
+                onClick={handleLogout}
+                className="top-2 text-white-600 hover:text-red-900 "
+              >
+                <FaArrowRightFromBracket />
               </Link>
             </li>
           </ul>
@@ -103,7 +101,7 @@ const Layout = () => {
             <ul className="font-semibold text-4xl space-y-8 mt-24 text-center">
               <li>
                 <Link
-                  to="categoria"
+                  to="/Categoria"
                   onClick={closeNav}
                   smooth={true}
                   offset={50}
@@ -114,7 +112,7 @@ const Layout = () => {
               </li>
               <li>
                 <Link
-                  to="productos"
+                  to="/Producto"
                   onClick={closeNav}
                   smooth={true}
                   offset={50}
@@ -125,7 +123,7 @@ const Layout = () => {
               </li>
               <li>
                 <Link
-                  to="carrito"
+                  to="/Venta"
                   onClick={closeNav}
                   smooth={true}
                   offset={50}
@@ -135,13 +133,13 @@ const Layout = () => {
                 </Link>
               </li>
               <li>
-              <Link
-               onClick={handleLogout}
-               className=" text-white-600 hover:text-red-900"
-               >
-                Cerrar sesion
-              </Link>
-            </li>
+                <Link
+                  onClick={handleLogout}
+                  className=" text-white-600 hover:text-red-900"
+                >
+                  Cerrar sesion
+                </Link>
+              </li>
             </ul>
           </motion.div>
         </div>
@@ -156,4 +154,3 @@ const Layout = () => {
 };
 
 export default Layout;
-

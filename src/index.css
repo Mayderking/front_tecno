@@ -1,6 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Geist+Mono:wght@100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
+
 
 body {
     background-color: #1F252B;
@@ -10,6 +13,18 @@ body {
     color: #BFA181;
 }
 
-.secondary {
-    color: #22d8d2;
-}
+.abril-fatface-regular {
+    font-family: "Abril Fatface", serif;
+    font-weight: 500;
+    font-style: normal;
+  }
+
+.material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48
+  }
+
+  

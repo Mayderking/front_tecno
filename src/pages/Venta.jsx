@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import api from "../api/api";
+import { motion } from "framer-motion";
 import { format } from "date-fns";
 
 const Venta = () => {
@@ -94,108 +95,108 @@ const Venta = () => {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="container mx-auto p-6 bg-gradient-to-br from-blue-100 to-teal-200 min-h-screen">
-      <h1 className="text-3xl font-bold text-center text-teal-800 mb-6">
-        Gestión de Ventas
-      </h1>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 2.5 }}
+    >
+      <div className="container mx-auto p-6 min-h-screen">
+        <h1 className="text-3xl font-bold text-center text-primary mb-6 abril-fatface-regular">
+          Gestión de Ventas
+        </h1>
 
-      {/* Botón para mostrar/ocultar el formulario */}
-      <button
-        onClick={() => setShowForm(!showForm)}
-        className="bg-teal-600 text-white px-4 py-2 rounded shadow hover:bg-teal-700 mb-6"
-      >
-        {showForm ? "Cerrar Formulario" : "Nueva Venta"}
-      </button>
-
-      {/* Formulario para registrar venta */}
-      {showForm && (
-        <form
-          onSubmit={handleCreate}
-          className="bg-white p-4 rounded shadow-md w-1/2 mx-auto mb-6"
+        {/* Botón para mostrar/ocultar el formulario */}
+        <button
+          onClick={() => setShowForm(!showForm)}
+          className="bg-[#b6d7fd] text-black px-4 py-2 rounded shadow hover:bg-[#81a1c6] mb-6"
         >
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">
-            Registrar Nueva Venta
-          </h2>
-          <select
-            value={formData.producto}
-            onChange={handleProductoChange}
-            className="w-full mb-4 p-2 border rounded"
-          >
-            <option value="">Seleccionar Producto</option>
-            {productos.map((producto) => (
-              <option key={producto.id} value={producto.id}>
-                {producto.nombre} - ${producto.precio}
-              </option>
-            ))}
-          </select>
-          <input
-            type="number"
-            placeholder="Cantidad"
-            value={formData.cantidad}
-            onChange={handleCantidadChange}
-            className="w-full mb-4 p-2 border rounded"
-          />
-          <input
-            type="number"
-            placeholder="Total"
-            value={formData.total}
-            readOnly
-            className="w-full mb-4 p-2 border rounded"
-          />
-          <button
-            type="submit"
-            className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600"
-          >
-            Registrar Venta
-          </button>
-        </form>
-      )}
+          {showForm ? "Cerrar Formulario" : "Nueva Venta"}
+        </button>
 
-      {/* Tabla de ventas */}
-      <table className="table-auto w-full border border-gray-200 mb-6">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border border-gray-300 px-4 py-2">ID</th>
-            <th className="border border-gray-300 px-4 py-2">Producto</th>
-            <th className="border border-gray-300 px-4 py-2">Cantidad</th>
-            <th className="border border-gray-300 px-4 py-2">Total</th>
-            <th className="border border-gray-300 px-4 py-2">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
+        {/* Formulario para registrar venta */}
+        {showForm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <form
+              onSubmit={handleCreate}
+              className="bg-[#233953] p-4 rounded shadow-md w-auto mx-auto mb-6"
+            >
+              <h2 className="text-xl font-semibold text-gray-700 mb-4 text-primary abril-fatface-regular">
+                Registrar Nueva Venta
+              </h2>
+              <select
+                value={formData.producto}
+                onChange={handleProductoChange}
+                className="w-full mb-4 p-2 border rounded bg-[#1F252B] border-gray-800 focus:border-[#dec6ac] font-light outline-none text-white"
+              >
+                <option value="">Seleccionar Producto</option>
+                {productos.map((producto) => (
+                  <option key={producto.id} value={producto.id}>
+                    {producto.nombre} - ${producto.precio}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="number"
+                placeholder="Cantidad"
+                value={formData.cantidad}
+                onChange={handleCantidadChange}
+                className="w-full mb-4 p-2 border rounded bg-[#1F252B] border-gray-800 focus:border-[#dec6ac] font-light outline-none text-white"
+              />
+              <input
+                type="number"
+                placeholder="Total"
+                value={formData.total}
+                readOnly
+                className="w-full mb-4 p-2 border rounded bg-[#1F252B] border-gray-800 focus:border-[#dec6ac] font-light outline-none text-white"
+              />
+              <button
+                type="submit"
+                className="bg-[#b6d7fd] text-black px-4 py-2 rounded hover:bg-[#81a1c6]"
+              >
+                Registrar Venta
+              </button>
+            </form>
+          </motion.div>
+        )}
+
+        {/* Tabla de ventas */}
+        <div className="py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {ventas.map((venta) => {
             // Buscar el producto asociado en la lista de productos
             const productoAsociado = productos.find(
               (producto) => producto.id === venta.producto
             );
+
             return (
-              <tr key={venta.id}>
-                <td className="border border-gray-300 px-4 py-2">{venta.id}</td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {productoAsociado
-                    ? productoAsociado.nombre
-                    : "Producto no disponible"}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {venta.cantidad}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {venta.total}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  <button
-                    onClick={() => handleDelete(venta.id)}
-                    className="bg-red-500 text-white py-1 px-2 rounded"
-                  >
-                    Eliminar
-                  </button>
-                </td>
-              </tr>
+              <div
+                key={venta.id}
+                className="bg-[#233953] rounded shadow-md p-4 border border-[#dec6ac]"
+              >
+                <h3 className="text-xl font-semibold text-primary abril-fatface-regular">
+                  Venta ID: {venta.id}
+                </h3>
+                <p className="text-white">
+                  Producto:{" "}
+                  {productoAsociado ? productoAsociado.nombre : "No disponible"}
+                </p>
+                <p className="text-white">Cantidad: {venta.cantidad}</p>
+                <p className="text-white">Total: ${venta.total}</p>
+                <button
+                  onClick={() => handleDelete(venta.id)}
+                  className="bg-[#b6d7fd] text-black px-4 py-2 rounded hover:bg-[#81a1c6] mt-4"
+                >
+                  Eliminar
+                </button>
+              </div>
             );
           })}
-        </tbody>
-      </table>
-    </div>
+        </div>
+      </div>
+    </motion.div>
   );
 };
 

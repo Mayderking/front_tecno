@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom"; // Importar useNavigate
+import { Link } from "react-router-dom"; // Importar useNavigate
+import { motion } from "framer-motion";
 import api, { setAuthToken } from "../api/api";
 
 const Categoria = () => {
@@ -8,7 +9,6 @@ const Categoria = () => {
   const [formData, setFormData] = useState({ nombre: "", descripcion: "" });
   const [showForm, setShowForm] = useState(false);
   const [error, setError] = useState("");
-  const navigate = useNavigate(); // Inicializar navigate
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -17,11 +17,11 @@ const Categoria = () => {
     } else {
       setError(
         <>
-        No estás autenticado. Inicia sesión para continuar.{" "}
-        <Link to="/login" className="text-blue-500 hover:underline">
-          Ir al Login
-        </Link>
-      </>
+          No estás autenticado. Inicia sesión para continuar.{" "}
+          <Link to="/login" className="text-blue-500 hover:underline">
+            Ir al Login
+          </Link>
+        </>
       );
       setLoading(false);
       return;
@@ -68,76 +68,92 @@ const Categoria = () => {
   };
 
   return (
-    <div className="p-6 min-h-screen">
-      <h1 className="text-3xl font-bold text-center text-primary mb-6">
-        Gestión de Categorías
-      </h1>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 2.5 }}
+    >
+      <div className="p-6 min-h-screen">
+        <h1 className="text-3xl font-bold text-center text-primary mb-6 abril-fatface-regular">
+          Gestión de Categorías
+        </h1>
 
-      <button
-        onClick={() => setShowForm(!showForm)}
-        className="bg-[#b6d7fd] text-black px-4 py-2 rounded shadow hover:bg-[#81a1c6] mb-6"
-      >
-        {showForm ? "Cerrar Formulario" : "Nueva Categoría"}
-      </button>
-
-      {showForm && (
-        <form
-          onSubmit={handleCreate}
-          className="bg-[#233953] p-4 rounded shadow-md w-auto mx-auto mb-6"
+        <button
+          onClick={() => setShowForm(!showForm)}
+          className="bg-[#b6d7fd] text-black px-4 py-2 rounded shadow hover:bg-[#81a1c6] mb-6"
         >
-          <h2 className="text-xl font-semibold text-primary mb-4">
-            Registrar Nueva Categoría
-          </h2>
-          <input
-            type="text"
-            placeholder="Nombre de la Categoría"
-            value={formData.nombre}
-            onChange={(e) =>
-              setFormData({ ...formData, nombre: e.target.value })
-            }
-            className="w-full mb-4 p-2 border rounded bg-[#1F252B] border-gray-800 focus:border-[#dec6ac] font-light outline-none text-white"
-          />
-          <textarea
-            placeholder="Descripción de la Categoría"
-            value={formData.descripcion}
-            onChange={(e) =>
-              setFormData({ ...formData, descripcion: e.target.value })
-            }
-            className="w-full mb-4 p-2 border rounded bg-[#1F252B] border-gray-800 focus:border-[#dec6ac] font-light outline-none text-white"
-          />
-          <button
-            type="submit"
-            className="bg-[#b6d7fd] text-black px-4 py-2 rounded hover:bg-[#81a1c6]"
-          >
-            Registrar Categoría
-          </button>
-        </form>
-      )}
+          {showForm ? "Cerrar Formulario" : "Nueva Categoría"}
+        </button>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {categorias.map((categoria) => (
-          <div
-            key={categoria.id}
-            className="bg-[#233953] rounded shadow-md p-4 border border-[#dec6ac]"
+        {showForm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
           >
-            <h2 className="text-lg font-semibold text-primary mb-2">
-              {categoria.nombre}
-            </h2>
-            <p className="text-white">{categoria.descripcion}</p>
-            <div className="flex justify-between mt-4">
+            <form
+              onSubmit={handleCreate}
+              className="bg-[#233953] p-4 rounded shadow-md w-auto mx-auto mb-6"
+            >
+              <h2 className="text-xl font-semibold text-primary mb-4 abril-fatface-regular">
+                Registrar Nueva Categoría
+              </h2>
+              <input
+                type="text"
+                placeholder="Nombre de la Categoría"
+                value={formData.nombre}
+                onChange={(e) =>
+                  setFormData({ ...formData, nombre: e.target.value })
+                }
+                className="w-full mb-4 p-2 border rounded bg-[#1F252B] border-gray-800 focus:border-[#dec6ac] font-light outline-none text-white"
+              />
+              <textarea
+                placeholder="Descripción de la Categoría"
+                value={formData.descripcion}
+                onChange={(e) =>
+                  setFormData({ ...formData, descripcion: e.target.value })
+                }
+                className="w-full mb-4 p-2 border rounded bg-[#1F252B] border-gray-800 focus:border-[#dec6ac] font-light outline-none text-white"
+              />
               <button
-                onClick={() => handleDelete(categoria.id)}
+                type="submit"
                 className="bg-[#b6d7fd] text-black px-4 py-2 rounded hover:bg-[#81a1c6]"
               >
-                Eliminar
+                Registrar Categoría
               </button>
-            </div>
-          </div>
-        ))}
-      </div>
+            </form>
+          </motion.div>
+        )}
 
-      {error && <p className="text-red-500 mt-4">{error}</p>}
-    </div>
+        <div className="py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {categorias.map((categoria) => (
+            <div
+              key={categoria.id}
+              className="bg-[#233953] rounded shadow-md p-4 border border-[#dec6ac]"
+            >
+              <h2 className="text-lg font-semibold text-primary mb-2 abril-fatface-regular">
+                {categoria.nombre}
+              </h2>
+              <p className="text-white">{categoria.descripcion}</p>
+              <div className="flex justify-between mt-4">
+                <button
+                  onClick={() => handleDelete(categoria.id)}
+                  className="bg-[#b6d7fd] text-black px-4 py-2 rounded hover:bg-[#81a1c6]"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {error && (
+          <p className="text-red-500 mt-4 absolute top-[155px] right-[1350px] ">
+            {error}
+          </p>
+        )}
+      </div>
+    </motion.div>
   );
 };
 
