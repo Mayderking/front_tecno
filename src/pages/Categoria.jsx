@@ -1,190 +1,144 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom"; // Importar useNavigate
+import api, { setAuthToken } from "../api/api";
 
-const Categorias = () => {
+const Categoria = () => {
   const [categorias, setCategorias] = useState([]);
-  const [nombre, setNombre] = useState("");
-  const [descripcion, setDescripcion] = useState("");
-  const [editingCategory, setEditingCategory] = useState(null);
-  const [updatedName, setUpdatedName] = useState("");
-  const [updatedDescription, setUpdatedDescription] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [formData, setFormData] = useState({ nombre: "", descripcion: "" });
+  const [showForm, setShowForm] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate(); // Inicializar navigate
 
-  const api = axios.create({
-    baseURL: "http://127.0.0.1:8000/api", // Asegúrate de usar la URL de tu backend
-  });
-
-  // Obtener categorías
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await api.get("/Categoria/");
-        setCategorias(response.data);
-      } catch (err) {
-        setError("Error al cargar las categorías.");
-      }
-    };
-    fetchCategories();
-  }, []);
-
-  // Crear nueva categoría
-  const handleCreate = async (e) => {
-    e.preventDefault();
-    if (!nombre.trim() || !descripcion.trim()) {
-      setError("El nombre y la descripción son obligatorios.");
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      setAuthToken(token); // Configura el token en Axios
+    } else {
+      setError(
+        <>
+        No estás autenticado. Inicia sesión para continuar.{" "}
+        <Link to="/login" className="text-blue-500 hover:underline">
+          Ir al Login
+        </Link>
+      </>
+      );
+      setLoading(false);
       return;
     }
+
+    api
+      .get("/Categoria/")
+      .then((response) => {
+        setCategorias(response.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (err.response?.status === 401) {
+          setError(
+            "No tienes permisos para ver las categorías. Inicia sesión nuevamente."
+          );
+        } else {
+          setError("Error al cargar las categorías.");
+        }
+        setLoading(false);
+      });
+  }, []);
+
+  const handleCreate = async (e) => {
+    e.preventDefault();
     try {
-      const response = await api.post("/Categoria/", { nombre, descripcion });
+      const response = await api.post("/Categoria/", formData);
       setCategorias([...categorias, response.data]);
-      setNombre("");
-      setDescripcion("");
-      setError("");
+      setFormData({ nombre: "", descripcion: "" });
+      setShowForm(false);
     } catch (err) {
       setError("Error al crear la categoría.");
     }
   };
 
-  // Eliminar categoría
   const handleDelete = async (id) => {
+    if (!window.confirm("¿Eliminar esta categoría?")) return;
     try {
       await api.delete(`/Categoria/${id}/`);
-      setCategorias(categorias.filter((cat) => cat.id !== id));
+      setCategorias(categorias.filter((categoria) => categoria.id !== id));
     } catch (err) {
       setError("Error al eliminar la categoría.");
     }
   };
 
-  // Actualizar categoría
-  const handleUpdate = async () => {
-    if (!updatedName.trim() || !updatedDescription.trim()) {
-      setError("El nombre y la descripción no pueden estar vacíos.");
-      return;
-    }
-    try {
-      await api.put(`/Categoria/${editingCategory.id}/`, {
-        nombre: updatedName,
-        descripcion: updatedDescription,
-      });
-      setCategorias(
-        categorias.map((cat) =>
-          cat.id === editingCategory.id
-            ? { ...cat, nombre: updatedName, descripcion: updatedDescription }
-            : cat
-        )
-      );
-      setEditingCategory(null);
-      setError("");
-    } catch (err) {
-      setError("Error al actualizar la categoría.");
-    }
-  };
-
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Gestión de Categorías</h1>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
+    <div className="p-6 min-h-screen">
+      <h1 className="text-3xl font-bold text-center text-primary mb-6">
+        Gestión de Categorías
+      </h1>
 
-      {/* Formulario para agregar nueva categoría */}
-      <form onSubmit={handleCreate} className="mb-6 flex flex-col gap-4">
-        <input
-          type="text"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          placeholder="Nombre de la categoría"
-          className="border p-2 rounded w-full"
-        />
-        <textarea
-          value={descripcion}
-          onChange={(e) => setDescripcion(e.target.value)}
-          placeholder="Descripción de la categoría"
-          className="border p-2 rounded w-full"
-        />
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded"
+      <button
+        onClick={() => setShowForm(!showForm)}
+        className="bg-teal-600 text-white px-4 py-2 rounded shadow hover:bg-teal-700 mb-6"
+      >
+        {showForm ? "Cerrar Formulario" : "Nueva Categoría"}
+      </button>
+
+      {showForm && (
+        <form
+          onSubmit={handleCreate}
+          className="bg-white p-4 rounded shadow-md w-1/2 mx-auto mb-6"
         >
-          Agregar
-        </button>
-      </form>
+          <h2 className="text-xl font-semibold text-gray-700 mb-4">
+            Registrar Nueva Categoría
+          </h2>
+          <input
+            type="text"
+            placeholder="Nombre de la Categoría"
+            value={formData.nombre}
+            onChange={(e) =>
+              setFormData({ ...formData, nombre: e.target.value })
+            }
+            className="w-full mb-4 p-2 border rounded"
+          />
+          <textarea
+            placeholder="Descripción de la Categoría"
+            value={formData.descripcion}
+            onChange={(e) =>
+              setFormData({ ...formData, descripcion: e.target.value })
+            }
+            className="w-full mb-4 p-2 border rounded"
+          />
+          <button
+            type="submit"
+            className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600"
+          >
+            Registrar Categoría
+          </button>
+        </form>
+      )}
 
-      {/* Tabla de categorías */}
-      <table className="table-auto w-full border-collapse border border-gray-300">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border border-gray-300 px-4 py-2">ID</th>
-            <th className="border border-gray-300 px-4 py-2">Nombre</th>
-            <th className="border border-gray-300 px-4 py-2">Descripción</th>
-            <th className="border border-gray-300 px-4 py-2">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {categorias.map((categoria) => (
-            <tr key={categoria.id}>
-              <td className="border border-gray-300 px-4 py-2">{categoria.id}</td>
-              <td className="border border-gray-300 px-4 py-2">{categoria.nombre}</td>
-              <td className="border border-gray-300 px-4 py-2">{categoria.descripcion}</td>
-              <td className="border border-gray-300 px-4 py-2 flex gap-2">
-                <button
-                  onClick={() => {
-                    setEditingCategory(categoria);
-                    setUpdatedName(categoria.nombre);
-                    setUpdatedDescription(categoria.descripcion);
-                  }}
-                  className="bg-yellow-500 text-white py-1 px-2 rounded"
-                >
-                  Editar
-                </button>
-                <button
-                  onClick={() => handleDelete(categoria.id)}
-                  className="bg-red-500 text-white py-1 px-2 rounded"
-                >
-                  Eliminar
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* Modal de edición */}
-      {editingCategory && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded shadow-md">
-            <h2 className="text-xl mb-4">Editar Categoría</h2>
-            <input
-              type="text"
-              value={updatedName}
-              onChange={(e) => setUpdatedName(e.target.value)}
-              className="border p-2 rounded w-full mb-4"
-              placeholder="Nombre"
-            />
-            <textarea
-              value={updatedDescription}
-              onChange={(e) => setUpdatedDescription(e.target.value)}
-              className="border p-2 rounded w-full mb-4"
-              placeholder="Descripción"
-            />
-            <div className="flex gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {categorias.map((categoria) => (
+          <div
+            key={categoria.id}
+            className="bg-white rounded shadow-md p-4 border border-gray-200"
+          >
+            <h2 className="text-lg font-semibold text-gray-800 mb-2">
+              {categoria.nombre}
+            </h2>
+            <p className="text-gray-600">{categoria.descripcion}</p>
+            <div className="flex justify-between mt-4">
               <button
-                onClick={handleUpdate}
-                className="bg-green-500 text-white py-2 px-4 rounded"
+                onClick={() => handleDelete(categoria.id)}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
               >
-                Guardar
-              </button>
-              <button
-                onClick={() => setEditingCategory(null)}
-                className="bg-red-500 text-white py-2 px-4 rounded"
-              >
-                Cancelar
+                Eliminar
               </button>
             </div>
           </div>
-        </div>
-      )}
+        ))}
+      </div>
+
+      {error && <p className="text-red-500 mt-4">{error}</p>}
     </div>
   );
 };
 
-export default Categorias;
-
+export default Categoria;

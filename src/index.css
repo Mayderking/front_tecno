@@ -2,3 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+    background-color: #0A1828;
+}
+
+.text-primary {
+    color: #BFA181;
+}
+
+.text-secondary {
+    color: #22d8d2;
+}
